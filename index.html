@@ -15,5 +15,48 @@
     <div id="preview"></div>
     <input type="submit" style="margin-top: 50px;">
 </form>
+
+<script type = "text/javascript">
+    var dropZone = document.getElementById('drop-zone');
+    var preview = document.getElementById('preview');
+    var fileInput = document.getElementById('file-input');
+
+    dropZone.addEventListener('dragover', function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        this.style.background = '#e1e7f0';
+    }, false);
+
+    dropZone.addEventListener('dragleave', function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        this.style.background = '#ffffff';
+    }, false);
+
+    fileInput.addEventListener('change', function(){
+        previewFile(this.files[0]);
+    });
+    
+    dropZone.addEventListener('drop',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        this.style.background = "#ffffff";
+        var files = e.dataTransfer.files;
+        if(files.length > 1)return alert('アップロードできるファイルは一つだけです。');
+        fileInput.files = files;
+        previewFile(files[0]);
+    }, false);
+
+    function previewFile(file){
+        var fr = new FileReader();
+        fr.readAsDataURL(file);
+        fr.onload = function(){
+            var img = document.createElement('img');
+            img.setAttribute('src', fr.result);
+            preview.innerHTML = '';
+            preview.appendChild(img);
+        };
+    }
+</script>
 </body>
 </html>
